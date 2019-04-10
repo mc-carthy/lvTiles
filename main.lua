@@ -59,7 +59,21 @@ function love.keypressed(key)
         end
     end
 
-    if grid[emptyY - 1] then
-        grid[emptyY - 1][emptyX], grid[emptyY][emptyX] = grid[emptyY][emptyX], grid[emptyY - 1][emptyX]
+    local newEmptyY = emptyY
+    local newEmptyX = emptyX
+
+    if key == 'down' then
+        newEmptyY = emptyY - 1
+    elseif key == 'up' then
+        newEmptyY = emptyY + 1
+    elseif key == 'right' then
+        newEmptyX = emptyX - 1
+    elseif key == 'left' then
+        newEmptyX = emptyX + 1
+    end
+
+    if grid[newEmptyY] then
+        grid[newEmptyY][newEmptyX], grid[emptyY][emptyX] = 
+        grid[emptyY][emptyX], grid[newEmptyY][newEmptyX]
     end
 end
