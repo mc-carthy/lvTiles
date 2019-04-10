@@ -47,4 +47,19 @@ function love.keypressed(key)
         love.event.quit()
     end
 
+    local emptyX
+    local emptyY
+
+    for y = 1, gridYCount do
+        for x = 1, gridXCount do
+            if grid[y][x] == gridXCount * gridYCount then
+                emptyX = x
+                emptyY = y
+            end
+        end
+    end
+
+    if grid[emptyY - 1] then
+        grid[emptyY - 1][emptyX], grid[emptyY][emptyX] = grid[emptyY][emptyX], grid[emptyY - 1][emptyX]
+    end
 end
