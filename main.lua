@@ -25,6 +25,14 @@ function love.load()
             move('left')
         end
     end
+
+    for moveNumber = 1, gridXCount - 1 do
+        move('left')
+    end
+
+    for moveNumber = 1, gridYCount - 1 do
+        move('up')
+    end
 end
 
 function move(direction)
