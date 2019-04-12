@@ -11,6 +11,42 @@ function love.load()
             grid[y][x] = x + ((y - 1) * gridXCount)
         end
     end
+
+
+    for moveNumber = 1, 1000 do
+        local emptyX
+        local emptyY
+
+        for y = 1, gridYCount do
+            for x = 1, gridXCount do
+                if grid[y][x] == gridXCount * gridYCount then
+                    emptyX = x
+                    emptyY = y
+                end
+            end
+        end
+
+        local newEmptyY = emptyY
+        local newEmptyX = emptyX
+
+        local roll = love.math.random(4)
+        if roll == 1 then
+            newEmptyY = emptyY - 1
+        elseif roll == 2 then
+            newEmptyY = emptyY + 1
+        elseif roll == 3 then
+            newEmptyX = emptyX - 1
+        elseif roll == 4 then
+            newEmptyX = emptyX + 1
+        end
+
+        if grid[newEmptyY] and grid[newEmptyY][newEmptyX] then
+            grid[newEmptyY][newEmptyX], grid[emptyY][emptyX] = 
+            grid[emptyY][emptyX], grid[newEmptyY][newEmptyX]
+        end
+    end
+
+
 end
 
 function love.update(dt)
