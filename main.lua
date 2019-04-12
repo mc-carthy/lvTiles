@@ -14,39 +14,49 @@ function love.load()
 
 
     for moveNumber = 1, 1000 do
-        local emptyX
-        local emptyY
-
-        for y = 1, gridYCount do
-            for x = 1, gridXCount do
-                if grid[y][x] == gridXCount * gridYCount then
-                    emptyX = x
-                    emptyY = y
-                end
-            end
-        end
-
-        local newEmptyY = emptyY
-        local newEmptyX = emptyX
-
         local roll = love.math.random(4)
         if roll == 1 then
-            newEmptyY = emptyY - 1
+            move('down')
         elseif roll == 2 then
-            newEmptyY = emptyY + 1
+            move('up')
         elseif roll == 3 then
-            newEmptyX = emptyX - 1
+            move('right')
         elseif roll == 4 then
-            newEmptyX = emptyX + 1
+            move('left')
         end
+    end
+end
 
-        if grid[newEmptyY] and grid[newEmptyY][newEmptyX] then
-            grid[newEmptyY][newEmptyX], grid[emptyY][emptyX] = 
-            grid[emptyY][emptyX], grid[newEmptyY][newEmptyX]
+function move(direction)
+    local emptyX
+    local emptyY
+
+    for y = 1, gridYCount do
+        for x = 1, gridXCount do
+            if grid[y][x] == gridXCount * gridYCount then
+                emptyX = x
+                emptyY = y
+            end
         end
     end
 
+    local newEmptyY = emptyY
+    local newEmptyX = emptyX
 
+    if direction == 'down' then
+        newEmptyY = emptyY -  1
+    elseif direction == 'up' then
+        newEmptyY = emptyY +  1
+    elseif direction == 'right' then
+        newEmptyX = emptyX -  1
+    elseif direction == 'left' then
+        newEmptyX = emptyX +  1
+    end
+
+    if grid[newEmptyY] and grid[newEmptyY][newEmptyX] then
+        grid[newEmptyY][newEmptyX], grid[emptyY][emptyX] = 
+        grid[emptyY][emptyX], grid[newEmptyY][newEmptyX]
+    end
 end
 
 function love.update(dt)
@@ -83,33 +93,13 @@ function love.keypressed(key)
         love.event.quit()
     end
 
-    local emptyX
-    local emptyY
-
-    for y = 1, gridYCount do
-        for x = 1, gridXCount do
-            if grid[y][x] == gridXCount * gridYCount then
-                emptyX = x
-                emptyY = y
-            end
-        end
-    end
-
-    local newEmptyY = emptyY
-    local newEmptyX = emptyX
-
     if key == 'down' then
-        newEmptyY = emptyY - 1
+        move('down')
     elseif key == 'up' then
-        newEmptyY = emptyY + 1
+        move('up')
     elseif key == 'right' then
-        newEmptyX = emptyX - 1
+        move('right')
     elseif key == 'left' then
-        newEmptyX = emptyX + 1
-    end
-
-    if grid[newEmptyY] and grid[newEmptyY][newEmptyX] then
-        grid[newEmptyY][newEmptyX], grid[emptyY][emptyX] = 
-        grid[emptyY][emptyX], grid[newEmptyY][newEmptyX]
+        move('left')
     end
 end
