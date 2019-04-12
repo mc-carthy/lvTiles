@@ -4,35 +4,40 @@ function love.load()
     gridXCount = 4
     gridYCount = 4
 
-    grid = {}
-    for y = 1, gridYCount do
-        grid[y] = {}
-        for x = 1, gridXCount do
-            grid[y][x] = x + ((y - 1) * gridXCount)
+    function reset()
+        grid = {}
+        for y = 1, gridYCount do
+            grid[y] = {}
+            for x = 1, gridXCount do
+                grid[y][x] = getInitialValue(x, y)
+            end
         end
+
+        repeat
+            for moveNumber = 1, 1000 do
+                local roll = love.math.random(4)
+                if roll == 1 then
+                    move('down')
+                elseif roll == 2 then
+                    move('up')
+                elseif roll == 3 then
+                    move('right')
+                elseif roll == 4 then
+                    move('left')
+                end
+            end
+
+            for moveNumber = 1, gridXCount - 1 do
+                move('left')
+            end
+
+            for moveNumber = 1, gridYCount - 1 do
+                move('up')
+            end
+        until not isComplete()
     end
 
-
-    for moveNumber = 1, 10 do
-        local roll = love.math.random(4)
-        if roll == 1 then
-            move('down')
-        elseif roll == 2 then
-            move('up')
-        elseif roll == 3 then
-            move('right')
-        elseif roll == 4 then
-            move('left')
-        end
-    end
-
-    -- for moveNumber = 1, gridXCount - 1 do
-    --     move('left')
-    -- end
-
-    -- for moveNumber = 1, gridYCount - 1 do
-    --     move('up')
-    -- end
+    reset()
 end
 
 function move(direction)
@@ -65,6 +70,21 @@ function move(direction)
         grid[newEmptyY][newEmptyX], grid[emptyY][emptyX] = 
         grid[emptyY][emptyX], grid[newEmptyY][newEmptyX]
     end
+end
+
+function getInitialValue(x, y)
+    return x + ((y - 1) * gridXCount)
+end
+
+function isComplete()
+    for y = 1, gridYCount do
+        for x = 1, gridXCount do
+            if grid[y][x] ~= getInitialValue(x, y) then
+                return false
+            end
+        end
+    end
+    return true
 end
 
 function love.update(dt)
@@ -111,17 +131,15 @@ function love.keypressed(key)
         move('left')
     end
 
-    local complete = true
-
     for y = 1, gridYCount do
         for x = 1, gridXCount do
-            if grid[y][x] ~= ((y - 1) * gridXCount) + x then
+            if grid[y][x] ~= getInitialValue(x, y) then
                 complete = false
             end
         end
     end
 
-    if complete then
-        love.load()
+    if isComplete() then
+        reset()
     end
 end
