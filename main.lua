@@ -13,7 +13,7 @@ function love.load()
     end
 
 
-    for moveNumber = 1, 1000 do
+    for moveNumber = 1, 10 do
         local roll = love.math.random(4)
         if roll == 1 then
             move('down')
@@ -26,13 +26,13 @@ function love.load()
         end
     end
 
-    for moveNumber = 1, gridXCount - 1 do
-        move('left')
-    end
+    -- for moveNumber = 1, gridXCount - 1 do
+    --     move('left')
+    -- end
 
-    for moveNumber = 1, gridYCount - 1 do
-        move('up')
-    end
+    -- for moveNumber = 1, gridYCount - 1 do
+    --     move('up')
+    -- end
 end
 
 function move(direction)
@@ -109,5 +109,19 @@ function love.keypressed(key)
         move('right')
     elseif key == 'left' then
         move('left')
+    end
+
+    local complete = true
+
+    for y = 1, gridYCount do
+        for x = 1, gridXCount do
+            if grid[y][x] ~= ((y - 1) * gridXCount) + x then
+                complete = false
+            end
+        end
+    end
+
+    if complete then
+        love.load()
     end
 end
